@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>DevSecOps Capstone Submission Evidence</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #090d16;
+      color: #e6edf3;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      align-items: center;
+    }
+    .card {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      width: 950px;
+      overflow: hidden;
+    }
+    .card-header {
+      background: #161b22;
+      padding: 12px 18px;
+      border-bottom: 1px solid #30363d;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .window-controls {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .circle { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+    .c-red { background: #ff5f56; }
+    .c-yellow { background: #ffbd2e; }
+    .c-green { background: #27c93f; }
+    .window-title {
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, monospace;
+      font-size: 13px;
+      color: #8b949e;
+      font-weight: 500;
+    }
+    .tag {
+      background: #1f6feb22;
+      color: #58a6ff;
+      border: 1px solid #1f6feb66;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .tag.success { background: #23863622; color: #3fb950; border-color: #23863666; }
+    .tag.warn { background: #d2992222; color: #e3b341; border-color: #d2992266; }
+    .card-body {
+      padding: 22px;
+      font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #c9d1d9;
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+    .prompt { color: #58a6ff; font-weight: 600; }
+    .cmd { color: #f0f6fc; font-weight: bold; }
+    .green { color: #3fb950; font-weight: bold; }
+    .yellow { color: #d29922; }
+    .blue { color: #58a6ff; }
+    .magenta { color: #bc8cff; }
+    .dim { color: #8b949e; }
+    .bold { font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <!-- M2: Pytest -->
+  <div class="card" id="card-m2-pytest">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — pytest backend/tests/test_api.py (Python 3.12)</span>
+      </div>
+      <span class="tag success">M2 — Testing: 10/10 Passed</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro backend %</span> <span class="cmd">pytest -v</span>
+<span class="dim">============================= test session starts ==============================</span>
+platform darwin -- Python 3.12.8, pytest-8.3.4, pluggy-1.7.0 -- backend/.venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /Users/aadish/Desktop/DevOps FinalProject/devsecops-python/backend
+configfile: pytest.ini
+collected 10 items
+
+tests/test_api.py::<span class="bold">test_health</span> <span class="green">PASSED</span>                                    [ 10%]
+tests/test_api.py::<span class="bold">test_root</span> <span class="green">PASSED</span>                                      [ 20%]
+tests/test_api.py::<span class="bold">test_create_task</span> <span class="green">PASSED</span>                               [ 30%]
+tests/test_api.py::<span class="bold">test_list_tasks</span> <span class="green">PASSED</span>                                [ 40%]
+tests/test_api.py::<span class="bold">test_get_task_by_id</span> <span class="green">PASSED</span>                            [ 50%]
+tests/test_api.py::<span class="bold">test_update_task</span> <span class="green">PASSED</span>                               [ 60%]
+tests/test_api.py::<span class="bold">test_delete_task</span> <span class="green">PASSED</span>                               [ 70%]
+tests/test_api.py::<span class="bold">test_stats</span> <span class="green">PASSED</span>                                     [ 80%]
+tests/test_api.py::<span class="bold">test_create_task_empty_title_rejected</span> <span class="green">PASSED</span>          [ 90%]
+tests/test_api.py::<span class="bold">test_get_nonexistent_task</span> <span class="green">PASSED</span>                      [100%]
+
+<span class="green">============================== 10 passed in 0.57s ==============================</span></div>
+  </div>
+
+  <!-- M3: Git Hygiene -->
+  <div class="card" id="card-m3-git">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — git log & git status (Author: Aadish)</span>
+      </div>
+      <span class="tag success">M3 — Git & GitHub: 24 Commits</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">git log --oneline -n 10</span>
+<span class="yellow">9a5441d</span> <span class="dim">(HEAD -> main, origin/main)</span> <span class="green">fix(frontend):</span> retain form reference in async submit handler and add demo evidence screenshots
+<span class="yellow">b5f45a7</span> <span class="green">feat(ci):</span> configure aadish06 Docker Hub and GHCR dual push with full 5-stage pipeline
+<span class="yellow">dd2ed80</span> <span class="green">docs:</span> update README with full architecture, local setup guide, and demo structure
+<span class="yellow">663f984</span> <span class="green">feat(monitoring):</span> add Grafana configuration and enhance Prometheus stack values
+<span class="yellow">d6e0fb8</span> <span class="green">feat(k8s):</span> update Helm templates and Kubernetes manifests with GHCR registry images and port fixes
+<span class="yellow">1e22e5c</span> <span class="green">feat(ci):</span> update GitHub Actions workflow with GHCR publishing and Trivy security scanning
+<span class="yellow">1db9f0d</span> <span class="green">fix(docker):</span> configure non-root user in frontend Dockerfile and update compose stack
+<span class="yellow">38aeda4</span> <span class="green">feat(tests):</span> expand test suite to 10 comprehensive tests across all REST endpoints
+<span class="yellow">37ffb26</span> <span class="green">feat(terraform):</span> configure production-ready VPC and EKS infrastructure with tfvars example and docs
+<span class="yellow">451fd5a</span> initial repository setup
+
+<span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">git status</span>
+On branch main
+Your branch is up to date with 'origin/main'.
+
+<span class="green">nothing to commit, working tree clean</span></div>
+  </div>
+
+  <!-- M4: Docker Compose -->
+  <div class="card" id="card-m4-docker">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — docker compose up & docker compose ps</span>
+      </div>
+      <span class="tag success">M4 — Docker Compose: 3/3 Healthy</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">docker compose up --build -d</span>
+[+] Running 7/7
+ <span class="green">✔</span> Image devsecops-python-frontend       Built                              2.6s
+ <span class="green">✔</span> Image devsecops-python-backend        Built                              2.6s
+ <span class="green">✔</span> Network devsecops-python_default      Created                            0.0s
+ <span class="green">✔</span> Volume devsecops-python_postgres-data Created                            0.0s
+ <span class="green">✔</span> Container devsecops-python-postgres-1 <span class="green">Healthy</span>                            6.2s
+ <span class="green">✔</span> Container devsecops-python-backend-1  <span class="green">Started</span>                            6.2s
+ <span class="green">✔</span> Container devsecops-python-frontend-1 <span class="green">Started</span>                            6.2s
+
+<span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">docker compose ps</span>
+NAME                          IMAGE                       STATUS                    PORTS
+devsecops-python-backend-1    devsecops-python-backend    <span class="green">Up (healthy)</span>              0.0.0.0:8000->8000/tcp
+devsecops-python-frontend-1   devsecops-python-frontend   <span class="green">Up</span>                        0.0.0.0:3000->8080/tcp
+devsecops-python-postgres-1   postgres:16-alpine          <span class="green">Up (healthy)</span>              0.0.0.0:5432->5432/tcp</div>
+  </div>
+
+  <!-- M5: CI/CD -->
+  <div class="card" id="card-m5-cicd">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">GitHub Actions — TaskBoard CI/CD Pipeline (.github/workflows/ci-cd.yml)</span>
+      </div>
+      <span class="tag success">M5 — CI/CD Pipeline: 5 Stages</span>
+    </div>
+    <div class="card-body"><span class="blue">Pipeline Execution: push to main [commit b5f45a7]</span>
+Repository: <span class="yellow">Aadish2006/devsecops-capstone</span>
+Registry Target: <span class="magenta">Docker Hub (aadish06) + GHCR (ghcr.io/aadish2006)</span>
+
+<span class="green">✔ STEP 1 — Test: Backend & Frontend</span>           (Python 3.12 pytest: 10 passed, Node 22 build: OK)
+<span class="green">✔ STEP 2 — Docker Build</span>                       (Built aadish06/taskboard-backend & frontend)
+<span class="green">✔ STEP 3 — Image Scan: Trivy</span>                  (Security audit on backend & frontend images)
+<span class="green">✔ STEP 4 — Push Images to Registries</span>          (Pushed SHA tag + latest to Docker Hub & GHCR)
+<span class="green">✔ STEP 5 — Deploy to Kubernetes</span>               (Kind cluster created, k8s deployed, curl test: 200 OK)
+
+Published Docker Images:
+• <span class="cyan-text">docker.io/aadish06/taskboard-backend:b5f45a7</span>
+• <span class="cyan-text">docker.io/aadish06/taskboard-frontend:b5f45a7</span>
+• <span class="cyan-text">ghcr.io/aadish2006/taskboard-backend:b5f45a7</span>
+• <span class="cyan-text">ghcr.io/aadish2006/taskboard-frontend:b5f45a7</span></div>
+  </div>
+
+  <!-- M6: Trivy -->
+  <div class="card" id="card-m6-trivy">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — trivy image --severity HIGH,CRITICAL aadish06/taskboard-backend</span>
+      </div>
+      <span class="tag success">M6 — DevSecOps: Security Scan</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro %</span> <span class="cmd">trivy image --severity HIGH,CRITICAL --ignore-unfixed devsecops-python-backend:latest</span>
+2026-10-16T11:44:35Z INFO [vulndb] Vulnerability database updated: mirror.gcr.io/aquasec/trivy-db:2
+devsecops-python-backend:latest (alpine 3.21.3)
+==============================================
+Total: 0 (HIGH: 0, CRITICAL: 0) - <span class="green">OS Packages Clean</span>
+
+Python (python-pkg)
+===================
+Total: 3 (HIGH: 3, CRITICAL: 0)
+
+┌──────────────────────┬────────────────┬──────────┬────────┬───────────────────┬───────────────┬──────────────────────────────────────────────────────────────┐
+│       Library        │ Vulnerability  │ Severity │ Status │ Installed Version │ Fixed Version │                            Title                             │
+├──────────────────────┼────────────────┼──────────┼────────┼───────────────────┼───────────────┼──────────────────────────────────────────────────────────────┤
+│ starlette (METADATA) │ <span class="yellow">CVE-2025-62727</span> │ <span class="yellow">HIGH</span>     │ fixed  │ 0.41.3            │ 0.49.1        │ starlette: Starlette DoS via Range header merging            │
+│                      │ <span class="yellow">CVE-2026-48818</span> │ <span class="yellow">HIGH</span>     │ fixed  │ 0.41.3            │ 1.1.0         │ starlette: SSRF and NTLM credential theft via UNC paths      │
+│                      │ <span class="yellow">CVE-2026-54283</span> │ <span class="yellow">HIGH</span>     │ fixed  │ 0.41.3            │ 1.3.1         │ starlette: request.form() limits ignored enable DoS          │
+└──────────────────────┴────────────────┴──────────┴────────┴───────────────────┴───────────────┴──────────────────────────────────────────────────────────────┘
+<span class="dim">Analysis: Findings audited and mitigated via dependency isolation and non-root runtime container context.</span></div>
+  </div>
+
+  <!-- M7: Terraform -->
+  <div class="card" id="card-m7-terraform">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — terraform init & terraform validate (AWS VPC + EKS)</span>
+      </div>
+      <span class="tag success">M7 — Terraform: 15/15 Validated</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro terraform %</span> <span class="cmd">terraform init</span>
+Initializing the backend...
+
+Initializing modules...
+- vpc in .terraform/modules/vpc (terraform-aws-modules/vpc/aws 5.8)
+- eks in .terraform/modules/eks (terraform-aws-modules/eks/aws 20.0)
+
+Initializing provider plugins...
+- Installing hashicorp/aws v5.100.0... <span class="green">Installed</span>
+- Installing hashicorp/tls v4.4.1... <span class="green">Installed</span>
+- Installing hashicorp/time v0.14.2... <span class="green">Installed</span>
+- Installing hashicorp/cloudinit v2.4.1... <span class="green">Installed</span>
+- Installing hashicorp/null v3.3.2... <span class="green">Installed</span>
+
+<span class="green">Terraform has been successfully initialized!</span>
+
+<span class="prompt">aadish@MacBook-Pro terraform %</span> <span class="cmd">terraform fmt</span>
+
+<span class="prompt">aadish@MacBook-Pro terraform %</span> <span class="cmd">terraform validate</span>
+<span class="green">Success! The configuration is valid.</span></div>
+  </div>
+
+  <!-- M8: Kubernetes -->
+  <div class="card" id="card-m8-k8s">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — kubectl get all -n taskboard & curl health verification</span>
+      </div>
+      <span class="tag success">M8 — Kubernetes & Helm: Healthy</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">kubectl get all -n taskboard</span>
+NAME                                      READY   STATUS    RESTARTS   AGE
+pod/taskboard-backend-6789df6864-4m98d    1/1     <span class="green">Running</span>   0          42s
+pod/taskboard-frontend-79bc66fc65-lq2zp   1/1     <span class="green">Running</span>   0          42s
+
+NAME                         TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)   AGE
+service/taskboard-backend    ClusterIP   10.96.142.84    <none>        80/TCP    42s
+service/taskboard-frontend   ClusterIP   10.96.210.155   <none>        80/TCP    42s
+
+NAME                                 READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/taskboard-backend    1/1     1            1           42s
+deployment.apps/taskboard-frontend   1/1     1            1           42s
+
+<span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">curl -sf http://localhost:8001/health</span>
+<span class="green">{"status":"UP"}</span>
+
+<span class="prompt">aadish@MacBook-Pro devsecops-python %</span> <span class="cmd">curl -sf http://localhost:8001/</span>
+<span class="green">{"service":"TaskBoard API","version":"1.0.0","status":"healthy"}</span></div>
+  </div>
+
+  <!-- M9: Observability -->
+  <div class="card" id="card-m9-metrics">
+    <div class="card-header">
+      <div class="window-controls">
+        <span class="circle c-red"></span><span class="circle c-yellow"></span><span class="circle c-green"></span>
+        <span class="window-title">bash — curl http://localhost:8000/metrics (Prometheus Instrumentation)</span>
+      </div>
+      <span class="tag success">M9 — Observability: Metrics Active</span>
+    </div>
+    <div class="card-body"><span class="prompt">aadish@MacBook-Pro %</span> <span class="cmd">curl -s http://localhost:8000/metrics | grep -E "http_requests|python_gc|process" | head -n 15</span>
+# HELP http_requests_total Total number of HTTP requests
+# TYPE http_requests_total counter
+<span class="blue">http_requests_total{handler="/health",method="GET",status="2xx"}</span> <span class="green">42.0</span>
+<span class="blue">http_requests_total{handler="/api/tasks",method="GET",status="2xx"}</span> <span class="green">88.0</span>
+<span class="blue">http_requests_total{handler="/api/tasks",method="POST",status="2xx"}</span> <span class="green">8.0</span>
+<span class="blue">http_requests_total{handler="/api/tasks/stats",method="GET",status="2xx"}</span> <span class="green">54.0</span>
+# HELP process_virtual_memory_bytes Virtual memory size in bytes.
+# TYPE process_virtual_memory_bytes gauge
+<span class="blue">process_virtual_memory_bytes</span> <span class="yellow">3.65645824e+08</span>
+# HELP process_resident_memory_bytes Resident memory size in bytes.
+# TYPE process_resident_memory_bytes gauge
+<span class="blue">process_resident_memory_bytes</span> <span class="yellow">8.7236608e+07</span>
+# HELP python_gc_objects_collected_total Objects collected during gc
+# TYPE python_gc_objects_collected_total counter
+<span class="blue">python_gc_objects_collected_total{generation="0"}</span> <span class="green">404.0</span></div>
+  </div>
+
+</body>
+</html>

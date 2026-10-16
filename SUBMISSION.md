@@ -16,10 +16,11 @@ Late submissions lose **5 points per 24-hour period** after the deadline.
 Submit a single GitHub repository link via the submission form. The repo must contain:
 
 1. **`README.md`** — complete technical documentation (setup, architecture, stack, CI/CD, Terraform, K8s, observability)
-2. **`demo/` folder** with:
+2. **`screenshots/README.md`** — **Complete Submission Evidence Guide** with organized screenshots for all 10 modules (M1 to M10)
+3. **`demo/` folder** with:
    - 🎥 **Presentation video** (MP4) — **MANDATORY**
    - 📊 **PPT / PDF slide deck** — **MANDATORY**
-3. **`Submission Link:`**: https://forms.gle/XWAP1vAumDJgAPM1A
+4. **`Submission Link:`**: https://forms.gle/XWAP1vAumDJgAPM1A
 
 ---
 

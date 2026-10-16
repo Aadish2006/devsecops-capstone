@@ -4,7 +4,9 @@ A full-stack project management application demonstrating the complete DevOps li
 
 **Author**: Aadish  
 **Course**: DevSecOps Capstone  
-**Repository**: [github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)
+**Repository**: [github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)  
+**Submission Evidence**: See [screenshots/README.md](screenshots/README.md) for full visual evidence across all 10 modules (M1–M10).  
+**Grading Rubric Compliance**: See [SUBMISSION.md](SUBMISSION.md) & [GRADING.md](GRADING.md).
 
 ---
 
