@@ -140,17 +140,21 @@ This repository contains the complete, production-grade implementation of the **
 
 ### Visual Evidence
 
-#### 1. End-to-End 5-Stage GitHub Actions Pipeline
+#### 1. Live Complete Green Pipeline Run ([Run #38912722860](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860))
+![M5 Live Pipeline Success](M5_CICD_Pipeline/00_live_pipeline_success.png)
+*Figure 5.1: Live GitHub Actions execution showing all 5 jobs passing (Test 19s, Docker Build 21s, Trivy Scan 56s, Push Images 58s, Deploy to Kubernetes 1m 14s) in 4m 8s.*
+
+#### 2. End-to-End 5-Stage GitHub Actions Pipeline
 ![M5 CI/CD Pipeline](M5_CICD_Pipeline/01_github_actions_5_stage_pipeline.png)
-*Figure 5.1: GitHub Actions pipeline structure covering Test, Docker Build, Trivy Scan, Image Push, and K8s Deploy.*
+*Figure 5.2: GitHub Actions pipeline structure covering Test, Docker Build, Trivy Scan, Image Push, and K8s Deploy.*
 
-#### 2. Docker Hub Authentication Secret Configuration
+#### 3. Docker Hub Authentication Secret Configuration
 ![M5 Docker Hub Secret](M5_CICD_Pipeline/03_dockerhub_secret_configured.png)
-*Figure 5.2: GitHub repository Secrets settings showing `DOCKERHUB_TOKEN` configured for user `aadish06`.*
+*Figure 5.3: GitHub repository Secrets settings showing `DOCKERHUB_TOKEN` configured for user `aadish06`.*
 
-#### 3. Image Build & Registry Push Log
+#### 4. Image Build & Registry Push Log
 ![M5 Build Log](M5_CICD_Pipeline/02_github_actions_build_log.png)
-*Figure 5.3: Build step output validating image naming conventions and tags.*
+*Figure 5.4: Build step output validating image naming conventions and tags.*
 
 ---
 

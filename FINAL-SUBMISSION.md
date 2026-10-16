@@ -5,7 +5,7 @@
 **Docker Hub Username**: [aadish06](https://hub.docker.com/u/aadish06)  
 **Course**: DevOps Final Capstone Project  
 **Repository**: [https://github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)  
-**Live CI/CD Pipeline (100% Green)**: [GitHub Actions Run #38910599532](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38910599532)  
+**Live CI/CD Pipeline (100% Green)**: [GitHub Actions Run #38912722860](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)  
 **Presentation Deck**: [presentation.pptx](./presentation.pptx) | [presentation.pdf](./presentation.pdf)  
 **Target Evaluation**: **100 / 100 Points**
 
@@ -36,23 +36,6 @@ The **TaskBoard** project is an enterprise-grade, end-to-end DevSecOps capstone 
 
 ---
 
-## Master Grading Rubric Verification Index
-
-| Module | Topic | Rubric Weight | Verified Status | Key Deliverable / Evidence File |
-|---|---|---|---|---|
-| **M1** | Application — Frontend + Backend + Database | 10 pts | **10 / 10** ✅ | `screenshots/M1_Application/` (5 screenshots) |
-| **M2** | Testing — Pytest + Code Quality | 10 pts | **10 / 10** ✅ | `screenshots/M2_Testing/` (10/10 tests passing) |
-| **M3** | Git and GitHub Hygiene | 5 pts | **5 / 5** ✅ | Conventional Commits, clean `.gitignore` |
-| **M4** | Docker — Multi-Stage Non-Root & Compose | 10 pts | **10 / 10** ✅ | `appuser` (10001), `nginx-unprivileged` (101) |
-| **M5** | CI/CD — GitHub Actions Pipeline | 15 pts | **15 / 15** ✅ | 5-stage automated pipeline, Run #38910599532 |
-| **M6** | DevSecOps — Trivy Security Scan | 5 pts | **5 / 5** ✅ | Automated gate + Starlette CVE audit report |
-| **M7** | Terraform — AWS Infrastructure as Code | 15 pts | **15 / 15** ✅ | Modular VPC + EKS, `terraform validate` passed |
-| **M8** | Kubernetes + Helm | 15 pts | **15 / 15** ✅ | Manifests, Kind deploy, Helm Chart (dev/prod) |
-| **M9** | Observability — Prometheus + Grafana | 10 pts | **10 / 10** ✅ | Prometheus `/metrics`, scrape target UP, Grafana |
-| **M10** | Presentation & Technical Documentation | 5 pts | **5 / 5** ✅ | `presentation.pptx`, `presentation.pdf`, `FINAL-SUBMISSION.md` |
-| **TOTAL** | | **100 pts** | **100 / 100** | Full Compliance with `GRADING.md` |
-
----
 
 ## Module 1 — Application: Frontend + Backend + Database (10 Points)
 
@@ -150,14 +133,28 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
   3. `Image Scan — Trivy`: Security vulnerability gate.
   4. `Push Images to Registries`: Dual-registry push to Docker Hub (`aadish06`) and GHCR (`ghcr.io/aadish2006`).
   5. `Deploy to Kubernetes`: Kind cluster creation, deployment rollout, readiness verification, and curl API smoke test.
-- **Production-Ready & Fully Passing**: [Workflow Run #38910599532](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38910599532) completed with 100% green checkmarks across all jobs.
+- **Production-Ready & Fully Passing**: [Workflow Run #38912722860](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860) completed with 100% green checkmarks across all jobs.
 
 ### Visual Evidence:
-![M5 CI/CD Pipeline](screenshots/M5_CICD_Pipeline/01_github_actions_5_stage_pipeline.png)
-*Figure 5.1: GitHub Actions overview showing all 5 pipeline stages completed successfully.*
 
+#### 1. Complete End-to-End Pipeline Execution (100% Green)
+![M5 Complete Green Pipeline Run](screenshots/M5_CICD_Pipeline/00_live_pipeline_success.png)
+*Figure 5.1: Live GitHub Actions workflow run ([#38912722860](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)) triggered by Aadish (`Aadish2006`) on branch `main` (`9bc0e2f`). Total duration: **4m 8s** with all 5 stages completing successfully.*
+
+#### Pipeline Stage Breakdown & Verification in Screenshot:
+* **Test — Backend & Frontend (19s)**: Runs Python 3.12 dependencies installation, runs Pytest suite passing 10/10 tests (0.57s), and compiles the React 18 production build with Vite.
+* **Docker Build (21s)**: Multi-stage Docker builds for backend (`python:3.12-slim`, non-root `appuser:10001`) and frontend (`nginx-unprivileged:1.27-alpine` on port 8080).
+* **Image Scan — Trivy (56s)**: Aqua Security Trivy container scan auditing vulnerabilities before push.
+* **Push Images to Registries (58s)**: Authenticates with `secrets.DOCKERHUB_TOKEN` and pushes multi-arch tagged images to Docker Hub (`aadish06`) & GHCR (`ghcr.io/aadish2006`).
+* **Deploy to Kubernetes (1m 14s)**: Creates Kind cluster, applies `k8s/deployment.yaml` and `k8s/service.yaml` in namespace `taskboard`, verifies readiness probe passing within 180s, and executes automated API smoke tests returning `{"status":"UP"}` and `{"service":"TaskBoard API","version":"1.0.0"}`.
+
+#### 2. Detailed Pipeline Job Progression
+![M5 CI/CD Pipeline](screenshots/M5_CICD_Pipeline/01_github_actions_5_stage_pipeline.png)
+*Figure 5.2: Sequential pipeline view confirming dependencies and job ordering.*
+
+#### 3. Docker Hub Secret Configuration
 ![M5 Docker Hub Secret](screenshots/M5_CICD_Pipeline/03_dockerhub_secret_configured.png)
-*Figure 5.2: GitHub Actions repository secrets configured with `DOCKERHUB_TOKEN`.*
+*Figure 5.3: GitHub Actions repository secrets configured with `DOCKERHUB_TOKEN`.*
 
 ---
 

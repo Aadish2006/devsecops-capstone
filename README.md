@@ -2,7 +2,7 @@
 
 A full-stack project management application demonstrating the complete DevOps lifecycle: from code to a monitored Kubernetes environment.
 
-[![TaskBoard CI/CD](https://github.com/Aadish2006/devsecops-capstone/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38910599532)
+[![TaskBoard CI/CD](https://github.com/Aadish2006/devsecops-capstone/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)
 [![Docker Hub Backend](https://img.shields.io/badge/Docker%20Hub-taskboard--backend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-backend)
 [![Docker Hub Frontend](https://img.shields.io/badge/Docker%20Hub-taskboard--frontend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-frontend)
 
