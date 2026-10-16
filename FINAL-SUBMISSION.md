@@ -7,7 +7,6 @@
 **Repository**: [https://github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)  
 **Live CI/CD Pipeline (100% Green)**: [GitHub Actions Run #38912722860](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)  
 **Presentation Deck**: [presentation.pptx](./presentation.pptx) | [presentation.pdf](./presentation.pdf)  
-**Target Evaluation**: **100 / 100 Points**
 
 ---
 
