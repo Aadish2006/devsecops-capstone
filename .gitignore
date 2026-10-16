@@ -26,3 +26,8 @@ crash.log
 # OS
 .DS_Store
 Thumbs.db
+
+# Presentation drafting, video recording scripts, and generators (kept locally)
+*.html
+demo/VIDEO_SCRIPT_AND_OUTLINE.md
+scripts/generate_pptx.py

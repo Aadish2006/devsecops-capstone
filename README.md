@@ -2,11 +2,16 @@
 
 A full-stack project management application demonstrating the complete DevOps lifecycle: from code to a monitored Kubernetes environment.
 
+[![TaskBoard CI/CD](https://github.com/Aadish2006/devsecops-capstone/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38910599532)
+[![Docker Hub Backend](https://img.shields.io/badge/Docker%20Hub-taskboard--backend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-backend)
+[![Docker Hub Frontend](https://img.shields.io/badge/Docker%20Hub-taskboard--frontend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-frontend)
+
 **Author**: Aadish  
-**Course**: DevSecOps Capstone  
+**Course**: DevSecOps Capstone Project  
 **Repository**: [github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)  
-**Submission Evidence**: See [screenshots/README.md](screenshots/README.md) for full visual evidence across all 10 modules (M1–M10).  
-**Grading Rubric Compliance**: See [SUBMISSION.md](SUBMISSION.md) & [GRADING.md](GRADING.md).
+**Final Submission Dossier**: See [FINAL-SUBMISSION.md](FINAL-SUBMISSION.md) for full visual evidence & rubric verification across all 10 modules (M1–M10).  
+**Presentation Slides**: [presentation.pptx](presentation.pptx) | [presentation.pdf](presentation.pdf)  
+**Grading Rubric**: See [GRADING.md](GRADING.md) & [SUBMISSION.md](SUBMISSION.md).
 
 ---
 

@@ -4,8 +4,8 @@ This folder contains the presentation and video for the DevSecOps Capstone Proje
 
 ## Contents
 
-- `presentation.pdf` — Slide deck covering architecture, tech stack, CI/CD, and key learnings
-- `demo-video.mp4` — Full project walkthrough video
+- `../presentation.pptx` / `../presentation.pdf` — Final 8-slide presentation deck (located at repository root)
+- `demo-video.mp4` — Full project walkthrough video (3–5 minutes)
 
 ## Video Outline
 
