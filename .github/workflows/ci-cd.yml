@@ -198,7 +198,17 @@ jobs:
           kubectl wait --for=condition=ready pod \
             -l app=taskboard-backend \
             -n taskboard \
-            --timeout=120s
+            --timeout=180s
+
+      - name: Debug Kubernetes on failure
+        if: failure()
+        run: |
+          echo "=== PODS ==="
+          kubectl get pods -n taskboard -o wide
+          echo "=== POD DESCRIBE ==="
+          kubectl describe pods -n taskboard
+          echo "=== BACKEND LOGS ==="
+          kubectl logs -l app=taskboard-backend -n taskboard --tail=100 || true
 
       - name: Test backend API in CI (Curl)
         run: |

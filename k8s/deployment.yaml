@@ -22,7 +22,7 @@ spec:
             - containerPort: 8000
           env:
             - name: DATABASE_URL
-              value: "sqlite:///./taskboard.db"
+              value: "sqlite:////tmp/taskboard.db"
           readinessProbe:
             httpGet:
               path: /health
