@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: ghcr.io/aadish2006/taskboard-backend:__IMAGE_TAG__
+          image: aadish06/taskboard-backend:__IMAGE_TAG__
           ports:
             - containerPort: 8000
           env:
@@ -56,6 +56,6 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: ghcr.io/aadish2006/taskboard-frontend:__IMAGE_TAG__
+          image: aadish06/taskboard-frontend:__IMAGE_TAG__
           ports:
             - containerPort: 8080
