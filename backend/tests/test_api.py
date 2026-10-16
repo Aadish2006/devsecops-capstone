@@ -1,6 +1,6 @@
 """
-TaskBoard API test suite.
-Uses an in-memory SQLite database so production PostgreSQL is never touched.
+OpsDesk Helpdesk & Incident Response API test suite.
+Uses an in-memory/isolated SQLite database so production PostgreSQL is never touched.
 """
 import os
 
@@ -36,92 +36,101 @@ def test_root():
     response = client.get("/")
     assert response.status_code == 200
     data = response.json()
-    assert data["service"] == "TaskBoard API"
+    assert data["service"] == "OpsDesk Helpdesk API"
     assert "version" in data
 
 
-# ── Test 3: Create a task via POST ──
-def test_create_task():
-    response = client.post("/api/tasks", json={
-        "title": "Deploy application",
+# ── Test 3: Create an incident ticket via POST ──
+def test_create_ticket():
+    response = client.post("/api/tickets", json={
+        "title": "P1 Production Ingress Latency Spike",
+        "description": "High HTTP 504 gateway timeouts observed in ap-south-1",
         "priority": "HIGH",
         "assignee": "Aadish",
+        "status": "OPEN",
     })
     assert response.status_code == 201
     data = response.json()
-    assert data["title"] == "Deploy application"
+    assert data["title"] == "P1 Production Ingress Latency Spike"
     assert data["priority"] == "HIGH"
     assert "id" in data
     assert "created_at" in data
 
 
-# ── Test 4: List all tasks via GET ──
-def test_list_tasks():
-    response = client.get("/api/tasks")
+# ── Test 4: List all tickets via GET ──
+def test_list_tickets():
+    response = client.get("/api/tickets")
     assert response.status_code == 200
-    tasks = response.json()
-    assert isinstance(tasks, list)
-    assert len(tasks) >= 1
+    tickets = response.json()
+    assert isinstance(tickets, list)
+    assert len(tickets) >= 1
 
 
-# ── Test 5: Get a single task by ID ──
-def test_get_task_by_id():
-    create_resp = client.post("/api/tasks", json={"title": "Test get by ID"})
-    task_id = create_resp.json()["id"]
+# ── Test 5: Get a single ticket by ID ──
+def test_get_ticket_by_id():
+    create_resp = client.post("/api/tickets", json={"title": "SSL Certificate Renewal Required"})
+    ticket_id = create_resp.json()["id"]
 
-    response = client.get(f"/api/tasks/{task_id}")
+    response = client.get(f"/api/tickets/{ticket_id}")
     assert response.status_code == 200
-    assert response.json()["title"] == "Test get by ID"
+    assert response.json()["title"] == "SSL Certificate Renewal Required"
 
 
-# ── Test 6: Update a task via PUT ──
-def test_update_task():
-    create_resp = client.post("/api/tasks", json={"title": "Before update"})
-    task_id = create_resp.json()["id"]
+# ── Test 6: Update a ticket via PUT ──
+def test_update_ticket():
+    create_resp = client.post("/api/tickets", json={"title": "Database connection pool exhaustion"})
+    ticket_id = create_resp.json()["id"]
 
-    response = client.put(f"/api/tasks/{task_id}", json={
-        "title": "After update",
+    response = client.put(f"/api/tickets/{ticket_id}", json={
+        "title": "Database pool limit increased",
         "status": "IN_PROGRESS",
     })
     assert response.status_code == 200
     data = response.json()
-    assert data["title"] == "After update"
+    assert data["title"] == "Database pool limit increased"
     assert data["status"] == "IN_PROGRESS"
 
 
-# ── Test 7: Delete a task via DELETE ──
-def test_delete_task():
-    create_resp = client.post("/api/tasks", json={"title": "To be deleted"})
-    task_id = create_resp.json()["id"]
+# ── Test 7: Delete a ticket via DELETE ──
+def test_delete_ticket():
+    create_resp = client.post("/api/tickets", json={"title": "Transient node reboot alert"})
+    ticket_id = create_resp.json()["id"]
 
-    response = client.delete(f"/api/tasks/{task_id}")
+    response = client.delete(f"/api/tickets/{ticket_id}")
     assert response.status_code == 204
 
-    # Verify task is actually removed
-    get_resp = client.get(f"/api/tasks/{task_id}")
+    # Verify ticket is actually removed
+    get_resp = client.get(f"/api/tickets/{ticket_id}")
     assert get_resp.status_code == 404
 
 
-# ── Test 8: Task stats endpoint ──
+# ── Test 8: Ticket stats endpoint ──
 def test_stats():
-    response = client.get("/api/tasks/stats")
+    response = client.get("/api/tickets/stats")
     assert response.status_code == 200
     data = response.json()
     assert "total" in data
-    assert "todo" in data
+    assert "open" in data
     assert "inProgress" in data
-    assert "done" in data
+    assert "resolved" in data
     assert data["total"] >= 0
 
 
-# ── Test 9: Creating a task with an empty title is rejected ──
-def test_create_task_empty_title_rejected():
-    response = client.post("/api/tasks", json={"title": ""})
+# ── Test 9: Creating a ticket with an empty title is rejected ──
+def test_create_ticket_empty_title_rejected():
+    response = client.post("/api/tickets", json={"title": ""})
     assert response.status_code == 422
 
 
-# ── Test 10: Requesting a non-existent task returns 404 ──
-def test_get_nonexistent_task():
-    response = client.get("/api/tasks/99999")
+# ── Test 10: Requesting a non-existent ticket returns 404 ──
+def test_get_nonexistent_ticket():
+    response = client.get("/api/tickets/99999")
     assert response.status_code == 404
-    assert response.json()["detail"] == "Task not found"
+    assert response.json()["detail"] == "Ticket not found"
+
+
+# ── Test 11: Backward compatibility alias for /api/tasks ──
+def test_legacy_task_alias_endpoint():
+    response = client.get("/api/tasks")
+    assert response.status_code == 200
+    assert isinstance(response.json(), list)

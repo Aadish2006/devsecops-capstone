@@ -1,11 +1,330 @@
-import React,{useEffect,useState} from 'react'; import {createRoot} from 'react-dom/client'; import './styles.css';
-const API='/api';
-function App(){const [tasks,setTasks]=useState([]),[stats,setStats]=useState({total:0,todo:0,inProgress:0,done:0}),[filter,setFilter]=useState('ALL'),[showForm,setShowForm]=useState(false),[loading,setLoading]=useState(true),[error,setError]=useState('');
- const load=async()=>{try{setError('');const [a,b]=await Promise.all([fetch(`${API}/tasks`),fetch(`${API}/tasks/stats`)]);if(!a.ok||!b.ok)throw Error('Backend unavailable');setTasks(await a.json());setStats(await b.json())}catch(e){setError(e.message)}finally{setLoading(false)}};
- useEffect(()=>{load()},[]); const visible=filter==='ALL'?tasks:tasks.filter(t=>t.status===filter);
- const update=async(t)=>{const next=t.status==='TODO'?'IN_PROGRESS':t.status==='IN_PROGRESS'?'DONE':'TODO';await fetch(`${API}/tasks/${t.id}`,{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({...t,status:next})});load()};
- const del=async(id)=>{await fetch(`${API}/tasks/${id}`,{method:'DELETE'});load()};
- const create=async(e)=>{e.preventDefault();const form=e.currentTarget;const f=new FormData(form);await fetch(`${API}/tasks`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({title:f.get('title'),description:f.get('description'),priority:f.get('priority'),assignee:f.get('assignee'),status:'TODO'})});form.reset();setShowForm(false);load()};
- return <div className="app"><aside className="sidebar"><div className="brand"><span className="brand-mark">T</span><div><b>TaskBoard</b><small>DevOps Capstone</small></div></div><nav><a className="active">▦ <span>Dashboard</span></a><a>✓ <span>My Tasks</span></a><a>◫ <span>Projects</span></a><a>◌ <span>Activity</span></a></nav><div className="side-bottom"><div className="upgrade"><strong>Ship with confidence.</strong><p>Build, deploy and observe your application.</p></div><div className="profile"><div className="avatar">AS</div><div><b>Aadish</b><small>Developer</small></div><span>⋮</span></div></div></aside><main className="main"><header><div><p className="eyebrow">WORKSPACE / OVERVIEW</p><h1>Good morning, Aadish 👋</h1><p className="muted">Here's what's happening with your team today.</p></div><button className="primary" onClick={()=>setShowForm(true)}>＋ New task</button></header>{error&&<div className="alert">⚠ {error}. Start the backend and PostgreSQL, then refresh.</div>}<section className="stats"><Stat label="Total tasks" value={stats.total} icon="▦"/><Stat label="To do" value={stats.todo} icon="○"/><Stat label="In progress" value={stats.inProgress} icon="◔"/><Stat label="Completed" value={stats.done} icon="✓"/></section><section className="content-grid"><div className="panel tasks-panel"><div className="panel-head"><div><h2>Tasks</h2><p className="muted">Track work across the product team.</p></div><div className="filters">{['ALL','TODO','IN_PROGRESS','DONE'].map(x=><button className={filter===x?'selected':''} onClick={()=>setFilter(x)} key={x}>{x==='ALL'?'All':x.replace('_',' ')}</button>)}</div></div>{loading?<div className="empty">Loading tasks…</div>:<div className="table-wrap"><table><thead><tr><th>Task</th><th>Assignee</th><th>Priority</th><th>Status</th><th></th></tr></thead><tbody>{visible.map(t=><tr key={t.id}><td><div className="task-title"><span className={`dot ${t.status.toLowerCase()}`}></span><div><b>{t.title}</b><small>{t.description}</small></div></div></td><td>{t.assignee}</td><td><span className={`priority ${t.priority.toLowerCase()}`}>{t.priority}</span></td><td><span className={`status ${t.status.toLowerCase()}`}>{t.status.replace('_',' ')}</span></td><td><button className="icon-btn" onClick={()=>update(t)} title="Advance status">↻</button><button className="icon-btn" onClick={()=>del(t.id)} title="Delete task" style={{marginLeft:'4px',color:'#c75a5a'}}>✕</button></td></tr>)}</tbody></table>{!visible.length&&<div className="empty">No tasks in this filter.</div>}</div>}</div><aside className="panel activity"><div className="panel-head"><div><h2>Recent activity</h2><p className="muted">Latest workspace events.</p></div></div><Activity icon="✓" text="Monitoring dashboard completed" time="12 min ago"/><Activity icon="◔" text="Release task moved to in progress" time="38 min ago"/><Activity icon="＋" text="New onboarding task created" time="1 hr ago"/><Activity icon="↗" text="Deployment pipeline passed" time="2 hrs ago"/><div className="pipeline"><span>CI</span><i></i><span>Build</span><i></i><span>Scan</span><i></i><span>Deploy</span></div></aside></section>{showForm&&<div className="modal-backdrop"><form className="modal" onSubmit={create}><div className="modal-head"><div><p className="eyebrow">CREATE TASK</p><h2>Add a new task</h2></div><button type="button" className="close" onClick={()=>setShowForm(false)}>×</button></div><label>Task title<input name="title" required placeholder="e.g. Configure production ingress"/></label><label>Description<textarea name="description" placeholder="What needs to be done?"/></label><div className="form-row"><label>Priority<select name="priority"><option>LOW</option><option>MEDIUM</option><option>HIGH</option></select></label><label>Assignee<input name="assignee" defaultValue="Aadish"/></label></div><button className="primary full">Create task</button></form></div>}</main></div>}
-function Stat({label,value,icon}){return <div className="stat"><div className="stat-icon">{icon}</div><div><small>{label}</small><strong>{value}</strong><span>Updated just now</span></div></div>}; function Activity({icon,text,time}){return <div className="activity-row"><span className="activity-icon">{icon}</span><div><b>{text}</b><small>{time}</small></div></div>}; createRoot(document.getElementById('root')).render(<App/>);
+import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+import './styles.css';
 
+const API = '/api';
+
+function App() {
+  const [tickets, setTickets] = useState([]);
+  const [stats, setStats] = useState({ total: 0, open: 0, inProgress: 0, resolved: 0 });
+  const [filter, setFilter] = useState('ALL');
+  const [showForm, setShowForm] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  const load = async () => {
+    try {
+      setError('');
+      const [a, b] = await Promise.all([
+        fetch(`${API}/tickets`),
+        fetch(`${API}/tickets/stats`)
+      ]);
+      if (!a.ok || !b.ok) throw Error('Backend service unavailable');
+      const ticketsData = await a.json();
+      const statsData = await b.json();
+      setTickets(ticketsData);
+      setStats({
+        total: statsData.total || 0,
+        open: statsData.open !== undefined ? statsData.open : statsData.todo || 0,
+        inProgress: statsData.inProgress || 0,
+        resolved: statsData.resolved !== undefined ? statsData.resolved : statsData.done || 0
+      });
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    load();
+  }, []);
+
+  const visible = filter === 'ALL'
+    ? tickets
+    : tickets.filter(t => {
+        const s = t.status.toUpperCase();
+        if (filter === 'OPEN') return s === 'OPEN' || s === 'TODO';
+        if (filter === 'IN_PROGRESS') return s === 'IN_PROGRESS';
+        if (filter === 'RESOLVED') return s === 'RESOLVED' || s === 'DONE';
+        return s === filter;
+      });
+
+  const advanceStatus = async (t) => {
+    let nextStatus = 'OPEN';
+    const current = t.status.toUpperCase();
+    if (current === 'OPEN' || current === 'TODO') nextStatus = 'IN_PROGRESS';
+    else if (current === 'IN_PROGRESS') nextStatus = 'RESOLVED';
+    else nextStatus = 'OPEN';
+
+    await fetch(`${API}/tickets/${t.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ ...t, status: nextStatus })
+    });
+    load();
+  };
+
+  const del = async (id) => {
+    await fetch(`${API}/tickets/${id}`, { method: 'DELETE' });
+    load();
+  };
+
+  const create = async (e) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const f = new FormData(form);
+    await fetch(`${API}/tickets`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: f.get('title'),
+        description: f.get('description'),
+        priority: f.get('priority'),
+        assignee: f.get('assignee'),
+        status: 'OPEN'
+      })
+    });
+    form.reset();
+    setShowForm(false);
+    load();
+  };
+
+  return (
+    <div className="app">
+      <aside className="sidebar">
+        <div className="brand">
+          <span className="brand-mark">O</span>
+          <div>
+            <b>OpsDesk</b>
+            <small>Cloud & IT Helpdesk</small>
+          </div>
+        </div>
+        <nav>
+          <a className="active">▦ <span>Incident Desk</span></a>
+          <a>⚡ <span>Active Outages</span></a>
+          <a>🛡️ <span>SLAs & Alerts</span></a>
+          <a>◌ <span>System Audit</span></a>
+        </nav>
+        <div className="side-bottom">
+          <div className="upgrade">
+            <strong>Zero-Downtime SRE</strong>
+            <p>Monitored via Prometheus, Grafana & Kubernetes HPA.</p>
+          </div>
+          <div className="profile">
+            <div className="avatar">AS</div>
+            <div>
+              <b>Aadish</b>
+              <small>DevOps Engineer</small>
+            </div>
+            <span>⋮</span>
+          </div>
+        </div>
+      </aside>
+
+      <main className="main">
+        <header>
+          <div>
+            <p className="eyebrow">SERVICE DESK / INCIDENT MANAGEMENT</p>
+            <h1>DevOps Incident Center — Good morning, Aadish 👋</h1>
+            <p className="muted">Real-time cloud infrastructure tickets, SLA tracking, and system health.</p>
+          </div>
+          <button className="primary" onClick={() => setShowForm(true)}>＋ Log Incident</button>
+        </header>
+
+        {error && (
+          <div className="alert">
+            ⚠ {error}. Ensure FastAPI backend and PostgreSQL are running, then refresh.
+          </div>
+        )}
+
+        <section className="stats">
+          <Stat label="Total Incidents" value={stats.total} icon="▦" />
+          <Stat label="Open Tickets" value={stats.open} icon="○" />
+          <Stat label="In Progress" value={stats.inProgress} icon="◔" />
+          <Stat label="Resolved & Closed" value={stats.resolved} icon="✓" />
+        </section>
+
+        <section className="content-grid">
+          <div className="panel tasks-panel">
+            <div className="panel-head">
+              <div>
+                <h2>Incident Tickets</h2>
+                <p className="muted">Track customer issues, cloud alerts, and service outages.</p>
+              </div>
+              <div className="filters">
+                {['ALL', 'OPEN', 'IN_PROGRESS', 'RESOLVED'].map(x => (
+                  <button
+                    key={x}
+                    className={filter === x ? 'selected' : ''}
+                    onClick={() => setFilter(x)}
+                  >
+                    {x === 'ALL' ? 'All Tickets' : x.replace('_', ' ')}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="empty">Loading tickets…</div>
+            ) : (
+              <div className="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Incident Ticket</th>
+                      <th>Assigned Engineer</th>
+                      <th>Urgency</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {visible.map(t => (
+                      <tr key={t.id}>
+                        <td>
+                          <div className="task-title">
+                            <span className={`dot ${(t.status || 'open').toLowerCase()}`}></span>
+                            <div>
+                              <b>{t.title}</b>
+                              <small>{t.description || 'No description provided'}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td>{t.assignee}</td>
+                        <td>
+                          <span className={`priority ${(t.priority || 'medium').toLowerCase()}`}>
+                            {t.priority}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`status ${(t.status || 'open').toLowerCase()}`}>
+                            {(t.status || 'OPEN').replace('_', ' ')}
+                          </span>
+                        </td>
+                        <td>
+                          <button
+                            className="icon-btn"
+                            onClick={() => advanceStatus(t)}
+                            title="Advance Status"
+                          >
+                            ↻
+                          </button>
+                          <button
+                            className="icon-btn"
+                            onClick={() => del(t.id)}
+                            title="Delete Ticket"
+                            style={{ marginLeft: '6px', color: '#c75a5a' }}
+                          >
+                            ✕
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+                {!visible.length && <div className="empty">No tickets match this filter.</div>}
+              </div>
+            )}
+          </div>
+
+          <aside className="panel activity">
+            <div className="panel-head">
+              <div>
+                <h2>DevOps Incident Log</h2>
+                <p className="muted">Latest workspace & infrastructure events.</p>
+              </div>
+            </div>
+            <Activity icon="✓" text="[P1 Resolved] Database latency spike mitigated" time="12 min ago" />
+            <Activity icon="◔" text="[In Progress] Ingress SSL cert renewal" time="35 min ago" />
+            <Activity icon="＋" text="[New Ticket] Pod memory pressure on EKS worker" time="1 hr ago" />
+            <Activity icon="↗" text="[CI/CD] Trivy container security scan cleared" time="2 hrs ago" />
+            <div className="pipeline">
+              <span>CI</span>
+              <i></i>
+              <span>Build</span>
+              <i></i>
+              <span>Trivy Scan</span>
+              <i></i>
+              <span>GHCR</span>
+              <i></i>
+              <span>K8s Deploy</span>
+            </div>
+          </aside>
+        </section>
+
+        {showForm && (
+          <div className="modal-backdrop">
+            <form className="modal" onSubmit={create}>
+              <div className="modal-head">
+                <div>
+                  <p className="eyebrow">LOG NEW INCIDENT</p>
+                  <h2>Report an Incident Ticket</h2>
+                </div>
+                <button type="button" className="close" onClick={() => setShowForm(false)}>×</button>
+              </div>
+              <label>
+                Incident Subject / Title
+                <input
+                  name="title"
+                  required
+                  placeholder="e.g. EKS Pod memory pressure in ap-south-1"
+                />
+              </label>
+              <label>
+                Technical Description & Logs
+                <textarea
+                  name="description"
+                  placeholder="Describe observed behavior, impacted services, and error codes..."
+                />
+              </label>
+              <div className="form-row">
+                <label>
+                  Urgency / Priority
+                  <select name="priority" defaultValue="HIGH">
+                    <option value="CRITICAL">CRITICAL</option>
+                    <option value="HIGH">HIGH</option>
+                    <option value="MEDIUM">MEDIUM</option>
+                    <option value="LOW">LOW</option>
+                  </select>
+                </label>
+                <label>
+                  Assigned Engineer
+                  <input name="assignee" defaultValue="Aadish (DevOps Lead)" />
+                </label>
+              </div>
+              <button className="primary full">Submit Incident Ticket</button>
+            </form>
+          </div>
+        )}
+      </main>
+    </div>
+  );
+}
+
+function Stat({ label, value, icon }) {
+  return (
+    <div className="stat">
+      <div className="stat-icon">{icon}</div>
+      <div>
+        <small>{label}</small>
+        <strong>{value}</strong>
+        <span>Updated live</span>
+      </div>
+    </div>
+  );
+}
+
+function Activity({ icon, text, time }) {
+  return (
+    <div className="activity-row">
+      <span className="activity-icon">{icon}</span>
+      <div>
+        <b>{text}</b>
+        <small>{time}</small>
+      </div>
+    </div>
+  );
+}
+
+createRoot(document.getElementById('root')).render(<App />);

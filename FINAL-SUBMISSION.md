@@ -11,9 +11,12 @@
 
 ---
 
-## Executive Overview & Architecture
+## Executive Overview & Domain Context
 
-The **TaskBoard** project is an enterprise-grade, end-to-end DevSecOps capstone demonstrating automated continuous integration, continuous delivery, security scanning, infrastructure-as-code, container orchestration, and observability.
+**Project Title**: **OpsDesk — Cloud & IT Helpdesk Management System**  
+**Selected Capstone Domain**: **Helpdesk & Incident Response** (Selected from approved domain options in Session 21)  
+
+While the classroom exercise introduced a generic starter template ("TaskBoard"), this final submission has been engineered as **OpsDesk**, a full-featured IT Helpdesk and Cloud Incident Response platform tailored for SREs and DevOps teams. It allows on-call engineers to manage production outages, security vulnerabilities, SLA metrics, and incident resolution workflows with automated continuous integration, continuous delivery, security scanning, infrastructure-as-code, container orchestration, and observability.
 
 ```
 ┌────────────────────────────────────────────────────────────────────────────────────────┐
@@ -22,7 +25,7 @@ The **TaskBoard** project is an enterprise-grade, end-to-end DevSecOps capstone 
        │
        ▼
  ┌──────────────┐      ┌──────────────┐      ┌──────────────┐      ┌──────────────┐
- │  Developer   │ ───► │ GitHub Push  │ ───► │ Pytest (x10) │ ───► │ Docker Build │
+ │  Developer   │ ───► │ GitHub Push  │ ───► │ Pytest (x11) │ ───► │ Docker Build │
  │  Workspace   │      │ (ConvCommits)│      │ & Code Cov   │      │ (Multi-Stage)│
  └──────────────┘      └──────────────┘      └──────────────┘      └──────────────┘
                                                                           │
@@ -40,9 +43,9 @@ The **TaskBoard** project is an enterprise-grade, end-to-end DevSecOps capstone 
 ## Module 1 — Application: Frontend + Backend + Database (10 Points)
 
 ### Rubric Criteria Met:
-- **FastAPI Backend**: Implements all 5 REST endpoints (`GET /tasks`, `POST /tasks`, `PUT /tasks/{id}`, `DELETE /tasks/{id}`, `GET /tasks/stats`) plus `GET /health` (`{"status":"UP"}`).
-- **Database Architecture**: PostgreSQL integration with Alembic database migrations (`0001_create_tasks`).
-- **Personalized React UI**: Modern interface with personalized header ("Good morning, Aadish 👋"), user avatar badge ("AS"), real-time task statistics, priority tagging, and responsive layout.
+- **FastAPI Helpdesk Backend**: Implements all primary REST endpoints (`GET /api/tickets`, `POST /api/tickets`, `PUT /api/tickets/{id}`, `DELETE /api/tickets/{id}`, `GET /api/tickets/stats`) plus `GET /health` (`{"status":"UP"}`), `/ready`, and `/metrics` with backward-compatible aliases for legacy task routes.
+- **Database Architecture**: PostgreSQL integration with Alembic database migrations (`0001_create_tasks` provisioning `tickets` schema).
+- **Personalized React UI**: Modern interface with personal branding ("Good morning, Aadish 👋"), user avatar badge ("AS"), real-time incident statistics (Total Incidents, Open Tickets, In Progress, Resolved), urgency tagging, SLA indicators, and responsive layout.
 
 ### Visual Evidence:
 

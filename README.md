@@ -1,8 +1,11 @@
-# TaskBoard — DevSecOps Capstone Project
+# OpsDesk — Cloud & IT Helpdesk Management System (DevSecOps Capstone)
 
-A full-stack project management application demonstrating the complete DevOps lifecycle: from code to a monitored Kubernetes environment.
+An enterprise SaaS-style IT Helpdesk & Incident Response platform demonstrating the complete DevSecOps lifecycle: from code to a monitored Kubernetes environment.
 
-[![TaskBoard CI/CD](https://github.com/Aadish2006/devsecops-capstone/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)
+> **Project Domain**: **Helpdesk & Incident Response (OpsDesk)**  
+> Developed as a production-grade domain implementation under the Session 21 Final Student Project requirements (Domain: **Helpdesk**). Manages infrastructure outages, security alerts, SLA tracking, and on-call assignments with automated CI/CD and Kubernetes observability.
+
+[![OpsDesk CI/CD](https://github.com/Aadish2006/devsecops-capstone/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/Aadish2006/devsecops-capstone/actions/runs/38912722860)
 [![Docker Hub Backend](https://img.shields.io/badge/Docker%20Hub-taskboard--backend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-backend)
 [![Docker Hub Frontend](https://img.shields.io/badge/Docker%20Hub-taskboard--frontend-blue?logo=docker)](https://hub.docker.com/r/aadish06/taskboard-frontend)
 
@@ -22,8 +25,8 @@ A comprehensive 5-minute video walkthrough demonstrating the full DevSecOps plat
 
 - 📹 **Direct Video File**: [demo.mp4](demo.mp4) (19 MB, 1080p web-optimized MP4)
 - **Demonstration Highlights**:
-  - **Backend API & Testing**: FastAPI endpoints, SQLite test database, and all 10 Pytest test cases passing.
-  - **Frontend Interface**: React 18 Kanban board, real-time task creation, editing, and status updates.
+  - **Backend API & Testing**: FastAPI endpoints, SQLite test database, and all 11 Pytest test cases passing.
+  - **Frontend Interface**: React 18 OpsDesk Helpdesk dashboard, real-time ticket creation, editing, urgency tags, and status updates.
   - **Docker Containers**: Multi-stage, non-root container builds and Docker Compose orchestration.
   - **CI/CD & Security**: GitHub Actions pipeline execution, automated test runs, and Trivy vulnerability scan.
   - **Kubernetes & Cloud Infrastructure**: Helm deployment, Service / Ingress routing, and Prometheus + Grafana observability.
@@ -72,10 +75,10 @@ GitHub Actions
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 18, Vite, CSS |
+| Frontend | React 18, Vite, CSS (OpsDesk Incident Portal) |
 | Backend | Python 3.12, FastAPI, SQLAlchemy, Alembic |
 | Database | PostgreSQL 16 |
-| Testing | Pytest (10 test cases) |
+| Testing | Pytest (11 test cases) |
 | Containerization | Docker, Docker Compose |
 | CI/CD | GitHub Actions |
 | Security | Trivy (container image scanning) |
@@ -91,17 +94,20 @@ GitHub Actions
 ## API Endpoints
 
 ```text
-GET    /              — Service info
-GET    /health        — Liveness probe
-GET    /ready         — Readiness probe (verifies DB)
-GET    /metrics       — Prometheus metrics
+GET    /                 — Service info ("OpsDesk Helpdesk API")
+GET    /health           — Liveness probe
+GET    /ready            — Readiness probe (verifies DB)
+GET    /metrics          — Prometheus metrics
 
-GET    /api/tasks         — List all tasks
-GET    /api/tasks/{id}    — Get a single task
-POST   /api/tasks         — Create a task
-PUT    /api/tasks/{id}    — Update a task
-DELETE /api/tasks/{id}    — Delete a task
-GET    /api/tasks/stats   — Dashboard statistics
+GET    /api/tickets       — List all incident tickets
+GET    /api/tickets/{id}  — Get single ticket details
+POST   /api/tickets       — Log a new incident ticket
+PUT    /api/tickets/{id}  — Update ticket status / assignee / urgency
+DELETE /api/tickets/{id}  — Delete / resolve ticket
+GET    /api/tickets/stats — Incident dashboard statistics
+
+# Backward Compatibility:
+GET/POST/PUT/DELETE /api/tasks — Fully supported
 ```
 
 Swagger documentation: `http://localhost:8000/docs`

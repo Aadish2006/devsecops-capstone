@@ -6,10 +6,10 @@ from prometheus_fastapi_instrumentator import Instrumentator
 
 from .config import settings
 from .db import Base, engine, get_db
-from .models import Task
-from .schemas import StatsOut, TaskCreate, TaskOut, TaskUpdate
+from .models import Ticket, Task
+from .schemas import StatsOut, TicketCreate, TicketOut, TicketUpdate, TaskCreate, TaskOut, TaskUpdate
 
-app = FastAPI(title=settings.app_name, version="1.0.0")
+app = FastAPI(title=settings.app_name, version="1.0.0", description="OpsDesk IT Helpdesk & Incident Response API")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 Instrumentator().instrument(app).expose(app, endpoint="/metrics")
 
@@ -28,49 +28,102 @@ def health():
 
 @app.get("/ready")
 def ready(db: Session = Depends(get_db)):
-    db.execute(select(func.count(Task.id)))
+    db.execute(select(func.count(Ticket.id)))
     return {"status": "READY"}
 
-@app.get("/api/tasks", response_model=list[TaskOut])
-def list_tasks(db: Session = Depends(get_db)):
-    return list(db.scalars(select(Task).order_by(Task.id.desc())))
+# ── OpsDesk Ticket REST Endpoints ──
 
-@app.get("/api/tasks/stats", response_model=StatsOut)
+@app.get("/api/tickets", response_model=list[TicketOut], tags=["Tickets"])
+def list_tickets(db: Session = Depends(get_db)):
+    return list(db.scalars(select(Ticket).order_by(Ticket.id.desc())))
+
+@app.get("/api/tickets/stats", response_model=StatsOut, tags=["Tickets"])
 def stats(db: Session = Depends(get_db)):
-    rows = db.execute(select(Task.status, func.count(Task.id)).group_by(Task.status)).all()
+    rows = db.execute(select(Ticket.status, func.count(Ticket.id)).group_by(Ticket.status)).all()
     counts = {status: count for status, count in rows}
-    return StatsOut(total=sum(counts.values()), todo=counts.get("TODO", 0), inProgress=counts.get("IN_PROGRESS", 0), done=counts.get("DONE", 0))
+    open_count = counts.get("OPEN", 0) + counts.get("TODO", 0)
+    in_prog = counts.get("IN_PROGRESS", 0)
+    resolved_count = counts.get("RESOLVED", 0) + counts.get("DONE", 0)
+    total_count = sum(counts.values())
+    return StatsOut(
+        total=total_count,
+        open=open_count,
+        inProgress=in_prog,
+        resolved=resolved_count,
+        todo=open_count,
+        done=resolved_count
+    )
 
-@app.get("/api/tasks/{task_id}", response_model=TaskOut)
-def get_task(task_id: int, db: Session = Depends(get_db)):
-    task = db.get(Task, task_id)
-    if not task:
-        raise HTTPException(status_code=404, detail="Task not found")
-    return task
+@app.get("/api/tickets/{ticket_id}", response_model=TicketOut, tags=["Tickets"])
+def get_ticket(ticket_id: int, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, ticket_id)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    return ticket
 
-@app.post("/api/tasks", response_model=TaskOut, status_code=status.HTTP_201_CREATED)
-def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
-    task = Task(**payload.model_dump())
-    db.add(task)
+@app.post("/api/tickets", response_model=TicketOut, status_code=status.HTTP_201_CREATED, tags=["Tickets"])
+def create_ticket(payload: TicketCreate, db: Session = Depends(get_db)):
+    ticket = Ticket(**payload.model_dump())
+    db.add(ticket)
     db.commit()
-    db.refresh(task)
-    return task
+    db.refresh(ticket)
+    return ticket
 
-@app.put("/api/tasks/{task_id}", response_model=TaskOut)
-def update_task(task_id: int, payload: TaskUpdate, db: Session = Depends(get_db)):
-    task = db.get(Task, task_id)
-    if not task:
+@app.put("/api/tickets/{ticket_id}", response_model=TicketOut, tags=["Tickets"])
+def update_ticket(ticket_id: int, payload: TicketUpdate, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, ticket_id)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    for key, value in payload.model_dump(exclude_unset=True).items():
+        setattr(ticket, key, value)
+    db.commit()
+    db.refresh(ticket)
+    return ticket
+
+@app.delete("/api/tickets/{ticket_id}", status_code=status.HTTP_204_NO_CONTENT, tags=["Tickets"])
+def delete_ticket(ticket_id: int, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, ticket_id)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    db.delete(ticket)
+    db.commit()
+
+# ── Backward Compatibility Aliases (/api/tasks) ──
+
+@app.get("/api/tasks", response_model=list[TicketOut], include_in_schema=False)
+def list_tasks_alias(db: Session = Depends(get_db)):
+    return list_tickets(db)
+
+@app.get("/api/tasks/stats", response_model=StatsOut, include_in_schema=False)
+def stats_tasks_alias(db: Session = Depends(get_db)):
+    return stats(db)
+
+@app.get("/api/tasks/{task_id}", response_model=TicketOut, include_in_schema=False)
+def get_task_alias(task_id: int, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, task_id)
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Task not found")
+    return ticket
+
+@app.post("/api/tasks", response_model=TicketOut, status_code=status.HTTP_201_CREATED, include_in_schema=False)
+def create_task_alias(payload: TicketCreate, db: Session = Depends(get_db)):
+    return create_ticket(payload, db)
+
+@app.put("/api/tasks/{task_id}", response_model=TicketOut, include_in_schema=False)
+def update_task_alias(task_id: int, payload: TicketUpdate, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, task_id)
+    if not ticket:
         raise HTTPException(status_code=404, detail="Task not found")
     for key, value in payload.model_dump(exclude_unset=True).items():
-        setattr(task, key, value)
+        setattr(ticket, key, value)
     db.commit()
-    db.refresh(task)
-    return task
+    db.refresh(ticket)
+    return ticket
 
-@app.delete("/api/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_task(task_id: int, db: Session = Depends(get_db)):
-    task = db.get(Task, task_id)
-    if not task:
+@app.delete("/api/tasks/{task_id}", status_code=status.HTTP_204_NO_CONTENT, include_in_schema=False)
+def delete_task_alias(task_id: int, db: Session = Depends(get_db)):
+    ticket = db.get(Ticket, task_id)
+    if not ticket:
         raise HTTPException(status_code=404, detail="Task not found")
-    db.delete(task)
+    db.delete(ticket)
     db.commit()
