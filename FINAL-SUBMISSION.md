@@ -250,7 +250,7 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
 
 | Deliverable | Location in Repository | Verification Method |
 |---|---|---|
-| **Demo Video Walkthrough** | [demo.mp4](./demo.mp4) | Video Player / Browser (19 MB MP4) |
+| **Demo Video Walkthrough** | [demo.mp4](./demo.mp4) | Video Player / Browser (41 MB, 1080p MP4) |
 | **Technical Documentation** | [README.md](./README.md) | Markdown inspection |
 | **Comprehensive Evidence Guide** | [FINAL-SUBMISSION.md](./FINAL-SUBMISSION.md) | Rubric cross-reference |
 | **Modular Evidence Folder** | [screenshots/](./screenshots/) | 15+ verified PNGs |
