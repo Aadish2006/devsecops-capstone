@@ -6,6 +6,7 @@ export default function TicketTable({
   onFilterChange,
   onAdvanceStatus,
   onDeleteTicket,
+  onInspectTicket,
   loading,
 }) {
   const tabs = [
@@ -55,6 +56,16 @@ export default function TicketTable({
               {tab.label}
             </button>
           ))}
+          {filter === 'outages' && (
+            <button
+              className="selected"
+              style={{ background: '#f47761', color: 'white', borderColor: '#f47761' }}
+              onClick={() => onFilterChange('all')}
+              title="Click to reset to all tickets"
+            >
+              ⚡ Outages (P1/P2) ✕
+            </button>
+          )}
         </div>
       </div>
 
@@ -77,7 +88,7 @@ export default function TicketTable({
             <tbody>
               {tickets.map((t) => (
                 <tr key={t.id}>
-                  <td>
+                  <td style={{ cursor: 'pointer' }} onClick={() => onInspectTicket(t)}>
                     <div className="issue">
                       <i
                         className="severity-dot"
@@ -104,8 +115,15 @@ export default function TicketTable({
                     <div className="row-actions" style={{ justifyContent: 'flex-end' }}>
                       <button
                         className="row-action"
+                        onClick={() => onInspectTicket(t)}
+                        title="Inspect full incident details"
+                      >
+                        ↗
+                      </button>
+                      <button
+                        className="row-action"
                         onClick={() => onAdvanceStatus(t)}
-                        title="Advance ticket status"
+                        title="Advance status (Open → In Progress → Resolved)"
                       >
                         ↻
                       </button>
