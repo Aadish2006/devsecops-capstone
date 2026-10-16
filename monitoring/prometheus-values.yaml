@@ -1,6 +1,20 @@
+# Prometheus + Grafana values for kube-prometheus-stack Helm chart.
+# Install with:
+#   helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack \
+#     -n monitoring --create-namespace \
+#     -f monitoring/prometheus-values.yaml
+
 grafana:
   enabled: true
+  adminUser: admin
+  adminPassword: taskboard
+  service:
+    type: LoadBalancer
+
 prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorNamespaceSelector: {}
+
+alertmanager:
+  enabled: false
