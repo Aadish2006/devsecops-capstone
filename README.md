@@ -10,8 +10,23 @@ A full-stack project management application demonstrating the complete DevOps li
 **Course**: DevSecOps Capstone Project  
 **Repository**: [github.com/Aadish2006/devsecops-capstone](https://github.com/Aadish2006/devsecops-capstone)  
 **Final Submission Dossier**: See [FINAL-SUBMISSION.md](FINAL-SUBMISSION.md) for full visual evidence & rubric verification across all 10 modules (M1–M10).  
+**Video Walkthrough**: [demo.mp4](demo.mp4) (5-minute full platform demonstration)  
 **Presentation Slides**: [presentation.pptx](presentation.pptx) | [presentation.pdf](presentation.pdf)  
 **Grading Rubric**: See [GRADING.md](GRADING.md) & [SUBMISSION.md](SUBMISSION.md).
+
+---
+
+## 🎬 Project Demo Video
+
+A comprehensive 5-minute video walkthrough demonstrating the full DevSecOps platform is available directly in the root repository:
+
+- 📹 **Direct Video File**: [demo.mp4](demo.mp4) (19 MB, 1080p web-optimized MP4)
+- **Demonstration Highlights**:
+  - **Backend API & Testing**: FastAPI endpoints, SQLite test database, and all 10 Pytest test cases passing.
+  - **Frontend Interface**: React 18 Kanban board, real-time task creation, editing, and status updates.
+  - **Docker Containers**: Multi-stage, non-root container builds and Docker Compose orchestration.
+  - **CI/CD & Security**: GitHub Actions pipeline execution, automated test runs, and Trivy vulnerability scan.
+  - **Kubernetes & Cloud Infrastructure**: Helm deployment, Service / Ingress routing, and Prometheus + Grafana observability.
 
 ---
 
@@ -298,6 +313,11 @@ kubectl port-forward svc/kube-prometheus-stack-grafana 3000:80 -n monitoring
 
 ```text
 devsecops-capstone/
+├── demo.mp4                  # 5-minute project walkthrough video (19 MB MP4)
+├── presentation.pptx         # Presentation slide deck (PowerPoint)
+├── presentation.pdf          # Presentation slide deck (PDF export)
+├── FINAL-SUBMISSION.md       # Complete 10-module evidence dossier
+├── README.md                 # Project documentation & runbook
 ├── frontend/                 # React + Vite application
 │   ├── src/                  # JSX + CSS source
 │   ├── Dockerfile            # Multi-stage (Node → nginx-unprivileged)
@@ -314,9 +334,8 @@ devsecops-capstone/
 ├── k8s/                      # Namespace + bootstrap manifests
 ├── monitoring/               # Prometheus + Grafana values
 ├── troubleshooting/          # Deliberately broken manifests for practice
-├── scripts/                  # Load test helpers
-├── .github/workflows/        # CI/CD pipeline
-└── demo/                     # Presentation video + slides
+├── scripts/                  # Load test helpers & slide generators
+└── .github/workflows/        # CI/CD pipeline
 ```
 
 ---

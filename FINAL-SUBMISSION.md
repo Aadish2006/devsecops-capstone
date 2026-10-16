@@ -247,6 +247,7 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
 
 | Deliverable | Location in Repository | Verification Method |
 |---|---|---|
+| **Demo Video Walkthrough** | [demo.mp4](./demo.mp4) | Video Player / Browser (19 MB MP4) |
 | **Technical Documentation** | [README.md](./README.md) | Markdown inspection |
 | **Comprehensive Evidence Guide** | [FINAL-SUBMISSION.md](./FINAL-SUBMISSION.md) | Rubric cross-reference |
 | **Modular Evidence Folder** | [screenshots/](./screenshots/) | 15+ verified PNGs |
@@ -257,3 +258,4 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
 | **Kubernetes Manifests** | [k8s/](./k8s/) | `kubectl apply --dry-run=client` |
 | **Helm Charts** | [helm/taskboard/](./helm/taskboard/) | `helm lint` |
 | **Container Images** | [Docker Hub `aadish06`](https://hub.docker.com/u/aadish06) | Docker CLI pull |
+
