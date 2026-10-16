@@ -1,0 +1,16 @@
+# ==============================================================================
+# terraform.tfvars.example
+# ==============================================================================
+# Instructions:
+# 1. Copy this file to `terraform.tfvars`:
+#    cp terraform.tfvars.example terraform.tfvars
+# 2. Modify any configuration values below as needed.
+# 3. IMPORTANT: Never commit terraform.tfvars or any AWS secrets to git.
+#    The .gitignore file is configured to exclude *.tfvars.
+# ==============================================================================
+
+aws_region   = "ap-south-1"
+cluster_name = "taskboard-eks"
+vpc_name     = "taskboard-vpc"
+environment  = "dev"
+vpc_cidr     = "10.20.0.0/16"
