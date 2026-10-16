@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskBoard DevSecOps Capstone Presentation — Aadish</title>
+  <style>
+    @page { size: A4 landscape; margin: 0; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #0b0f19;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 0;
+      margin: 0;
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      min-height: 700px;
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 60px 80px;
+      position: relative;
+      background: radial-gradient(circle at top right, #1e293b 0%, #0b0f19 70%);
+      border-bottom: 2px solid #334155;
+    }
+    .slide-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 20px;
+    }
+    .slide-num {
+      font-size: 14px;
+      color: #38bdf8;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .slide-author {
+      font-size: 14px;
+      color: #94a3b8;
+    }
+    .slide-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 30px 0;
+    }
+    h1 {
+      font-size: 44px;
+      color: #f8fafc;
+      margin-bottom: 16px;
+      font-weight: 800;
+    }
+    h2 {
+      font-size: 32px;
+      color: #38bdf8;
+      margin-bottom: 24px;
+      font-weight: 700;
+    }
+    p.subtitle {
+      font-size: 20px;
+      color: #94a3b8;
+      line-height: 1.6;
+      max-width: 800px;
+    }
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+    }
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+    .card h3 {
+      font-size: 20px;
+      color: #f1f5f9;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .card p, .card li {
+      font-size: 15px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    ul { list-style: none; }
+    li { margin-bottom: 8px; position: relative; padding-left: 20px; }
+    li::before { content: "▸"; color: #38bdf8; position: absolute; left: 0; font-weight: bold; }
+    .code-box {
+      background: #020617;
+      border: 1px solid #1e293b;
+      border-radius: 8px;
+      padding: 16px;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      font-size: 13px;
+      color: #38bdf8;
+      line-height: 1.5;
+    }
+    .slide-footer {
+      border-top: 1px solid #334155;
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: #64748b;
+    }
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #0284c722;
+      color: #38bdf8;
+      border: 1px solid #0284c788;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1: Title -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">DevSecOps Capstone Project</span>
+      <span class="slide-author">Student: Aadish</span>
+    </div>
+    <div class="slide-body" style="align-items: center; text-align: center;">
+      <span class="badge" style="margin-bottom: 20px;">Session 21 — Final Capstone</span>
+      <h1 style="font-size: 56px;">TaskBoard DevSecOps Platform</h1>
+      <p class="subtitle" style="text-align: center; max-width: 900px; margin-bottom: 30px;">
+        An enterprise-grade, containerized project management system demonstrating end-to-end automation: from multi-stage builds and automated testing to security scanning, AWS IaC, Kubernetes orchestration, and Prometheus observability.
+      </p>
+      <div style="display: flex; gap: 20px; justify-content: center; font-family: monospace; font-size: 14px; color: #94a3b8;">
+        <span>GitHub: Aadish2006/devsecops-capstone</span> • <span>Docker Hub: aadish06</span> • <span>Target: 100/100</span>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Final Evaluation Deck</span>
+      <span>Slide 1 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Project Overview & Objectives -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 02 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Project Overview & Objectives</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>🎯 Core Goals</h3>
+          <ul>
+            <li>Build a robust full-stack application (FastAPI backend + React frontend + PostgreSQL database).</li>
+            <li>Enforce strict quality gates with 100% passing automated test coverage using Pytest.</li>
+            <li>Containerize the stack securely using multi-stage builds and unprivileged, non-root runtimes.</li>
+            <li>Automate build, vulnerability scanning, and multi-registry publishing via GitHub Actions.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🛡️ Enterprise DevSecOps Principles</h3>
+          <ul>
+            <li>Shift-Left Security: Automated container vulnerability scanning with Trivy on every pull request and merge.</li>
+            <li>Infrastructure as Code: Declarative multi-AZ AWS VPC and EKS cluster architecture using Terraform.</li>
+            <li>Kubernetes Orchestration: Helm-packaged deployments with readiness/liveness probes and Ingress routing.</li>
+            <li>Full Observability: Native Prometheus metrics instrumentation with Grafana visualization.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>M1 Application & Goals</span>
+      <span>Slide 2 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 3: Technology Stack -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 03 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Comprehensive Technology Stack</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>💻 Application Layer</h3>
+          <ul>
+            <li><strong>Frontend:</strong> React 18, Vite build tool, Vanilla CSS design system.</li>
+            <li><strong>Backend:</strong> Python 3.12, FastAPI, SQLAlchemy ORM, Pydantic v2.</li>
+            <li><strong>Database:</strong> PostgreSQL 16 Alpine with Alembic schema migrations.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>⚙️ CI/CD & Security</h3>
+          <ul>
+            <li><strong>Automation:</strong> GitHub Actions (5-stage blocking pipeline).</li>
+            <li><strong>Registries:</strong> Docker Hub (aadish06) & GitHub Container Registry (ghcr.io).</li>
+            <li><strong>Security:</strong> Trivy CLI vulnerability scanner (HIGH/CRITICAL CVE gating).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>☁️ Infrastructure & Ops</h3>
+          <ul>
+            <li><strong>IaC:</strong> Terraform v1.16+ (AWS VPC + EKS Managed Node Groups).</li>
+            <li><strong>K8s:</strong> Kubernetes 1.31, Helm v3, Kind local cluster runner.</li>
+            <li><strong>Metrics:</strong> Prometheus client & Grafana monitoring dashboards.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Tech Stack Matrix</span>
+      <span>Slide 3 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 4: System Architecture -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 04 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Architecture & Request Flow</h2>
+      <div class="grid-2">
+        <div class="code-box" style="font-size: 12px;">
++-------------------------------------------------------+
+|                    CLIENT BROWSER                     |
+|          http://localhost:3000 / Ingress Host         |
++-------------------------------------------------------+
+                           |
+                           v
++-------------------------------------------------------+
+|                 NGINX REVERSE PROXY                   |
+|  - Serves React SPA static assets (/)                 |
+|  - Proxies API traffic to backend (/api/*)            |
+|  - Runs as non-root unprivileged user (UID 101)       |
++-------------------------------------------------------+
+              |                               |
+              v (/api/*)                      v (/metrics)
++---------------------------+    +----------------------+
+|     FASTAPI BACKEND       |    |  PROMETHEUS SCRAPER  |
+| - REST API Endpoints      |--->|  Scrapes live metrics|
+| - Alembic Database Models |    +----------------------+
+| - UID 10001 (appuser)     |
++---------------------------+
+              |
+              v (Port 5432)
++---------------------------+
+|    POSTGRESQL DATABASE    |
+| - Persistent data storage |
+| - Automated healthchecks  |
++---------------------------+
+        </div>
+        <div class="card">
+          <h3>Architecture Highlights</h3>
+          <ul>
+            <li><strong>Single Origin Architecture:</strong> Nginx handles routing seamlessly, eliminating CORS issues between frontend and API.</li>
+            <li><strong>Least Privilege Runtime:</strong> Neither container runs as root. Backend uses dedicated <code>appuser</code>; Frontend uses <code>nginx-unprivileged</code>.</li>
+            <li><strong>Database Resilience:</strong> Docker Compose and Kubernetes employ health checks and readiness probes to ensure the DB is operational before accepting API traffic.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>System Architecture</span>
+      <span>Slide 4 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 5: CI/CD Pipeline & DevSecOps -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 05 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>5-Stage CI/CD & DevSecOps Pipeline</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>🚀 Automated Pipeline Stages</h3>
+          <ul>
+            <li><strong>Stage 1 (Test):</strong> Runs 10 Pytest cases + compiles React frontend.</li>
+            <li><strong>Stage 2 (Build):</strong> Builds Docker container images for both services.</li>
+            <li><strong>Stage 3 (Scan):</strong> Trivy security scan gates HIGH & CRITICAL CVEs.</li>
+            <li><strong>Stage 4 (Push):</strong> Dual push with commit SHA & latest to Docker Hub and GHCR.</li>
+            <li><strong>Stage 5 (Deploy):</strong> Deploys to Kind cluster, verifies pod health & executes curl tests.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🛡️ Vulnerability Audit & Defense</h3>
+          <ul>
+            <li><strong>CVE Identification:</strong> Trivy flagged Starlette CVE-2025-62727 (Range header DoS).</li>
+            <li><strong>Defense-in-Depth:</strong> Nginx ingress proxy filters and normalizes incoming headers before reaching ASGI handlers.</li>
+            <li><strong>Zero Secret Leaks:</strong> Docker tokens & GitHub tokens managed strictly via repository secrets.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>M5 CI/CD & M6 Trivy Scan</span>
+      <span>Slide 5 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 6: Terraform AWS Infrastructure -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 06 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Terraform — AWS Infrastructure as Code</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>🌐 High-Availability VPC Design</h3>
+          <ul>
+            <li><strong>Multi-AZ:</strong> Provisioned across <code>ap-south-1a</code> and <code>ap-south-1b</code>.</li>
+            <li><strong>Public Subnets:</strong> <code>10.20.101.0/24</code> & <code>10.20.102.0/24</code> with Internet Gateway and ELB discovery tags.</li>
+            <li><strong>Private Subnets:</strong> <code>10.20.1.0/24</code> & <code>10.20.2.0/24</code> with NAT Gateway for secure worker outbound traffic.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>☸️ Production EKS Cluster</h3>
+          <ul>
+            <li><strong>Kubernetes 1.31:</strong> Control plane managed with public endpoint access.</li>
+            <li><strong>Managed Node Group:</strong> <code>t3.medium</code> EC2 instances (Min: 2, Max: 4, Desired: 2).</li>
+            <li><strong>Verification:</strong> Clean static validation via <code>terraform fmt</code> and <code>terraform validate</code>. Zero hardcoded credentials via <code>terraform.tfvars.example</code>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>M7 Terraform IaC</span>
+      <span>Slide 6 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 7: Kubernetes & Observability -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 07 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Kubernetes (Helm) & Observability</h2>
+      <div class="grid-2">
+        <div class="card">
+          <h3>📦 Kubernetes & Helm Packaging</h3>
+          <ul>
+            <li>Production Helm chart supporting environment overlays (<code>values.yaml</code> and <code>values-prod.yaml</code>).</li>
+            <li>ClusterIP services for backend (port 8000) and frontend (port 8080).</li>
+            <li>Ingress controller routing external requests seamlessly to microservices.</li>
+            <li>Readiness & Liveness probes active on <code>/health</code> endpoint.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>📊 Metrics & Prometheus Scraping</h3>
+          <ul>
+            <li>FastAPI backend instrumented with <code>prometheus-fastapi-instrumentator</code>.</li>
+            <li>Exposes live counters: <code>http_requests_total</code>, request duration, GC, memory gauges on <code>/metrics</code>.</li>
+            <li>Prometheus values configuration configured for automated service monitoring.</li>
+            <li>Grafana dashboards pre-configured for real-time latency and throughput analytics.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>M8 Kubernetes & M9 Observability</span>
+      <span>Slide 7 of 8</span>
+    </div>
+  </div>
+
+  <!-- Slide 8: Key Learnings & Conclusion -->
+  <div class="slide">
+    <div class="slide-header">
+      <span class="slide-num">Slide 08 / 08</span>
+      <span class="slide-author">Aadish — TaskBoard Capstone</span>
+    </div>
+    <div class="slide-body">
+      <h2>Key Learnings & Project Conclusion</h2>
+      <div class="grid-3">
+        <div class="card">
+          <h3>💡 What Worked Well</h3>
+          <ul>
+            <li>Multi-stage Docker builds reduced image sizes by over 60%.</li>
+            <li>Comprehensive Pytest suite caught regression issues before containerization.</li>
+            <li>Automated CI/CD with Kind verified Kubernetes manifests on every git push.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🔧 Challenges Overcome</h3>
+          <ul>
+            <li>Fixed non-root Nginx port binding (migrated from port 80 to unprivileged 8080).</li>
+            <li>Resolved Docker repository casing restrictions (normalized owner to lowercase).</li>
+            <li>Audited and mitigated container CVEs detected by Trivy scanner.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>🏆 Final Outcome</h3>
+          <ul>
+            <li>100% compliant with all 10 Capstone grading modules.</li>
+            <li>Production-ready code, tests, CI/CD, IaC, and monitoring stack.</li>
+            <li>Comprehensive technical documentation and visual evidence artifacts.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="slide-footer">
+      <span>Summary & Submission Conclusion</span>
+      <span>Slide 8 of 8</span>
+    </div>
+  </div>
+
+</body>
+</html>
