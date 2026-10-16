@@ -49,17 +49,17 @@ While the classroom exercise introduced a generic starter template ("TaskBoard")
 
 ### Visual Evidence:
 
-#### 1. Live TaskBoard Dashboard (`http://localhost:3000`)
+#### 1. Live OpsDesk Incident Command Center (`http://localhost:3000`)
 ![M1 Dashboard Running](screenshots/M1_Application/01_app_dashboard_running.png)
-*Figure 1.1: Live TaskBoard interface featuring personal branding ("Good morning, Aadish 👋"), metric cards (Total Tasks: 3, To Do: 1, In Progress: 1, Completed: 1), and task stream.*
+*Figure 1.1: OpsDesk command center interface featuring personal branding ("Good morning, Aadish! Your systems are looking bright."), KPI cards (Total Incidents, Open Tickets, In Progress, Resolved), active outages card, 7-day SLA compliance bars, and donut distribution.*
 
-#### 2. Interactive Task Creation Modal
+#### 2. Interactive Incident Logging Modal
 ![M1 Create Task Modal](screenshots/M1_Application/02_app_create_task_modal.png)
-*Figure 1.2: Modal for adding new tasks with priority dropdown (High, Medium, Low) and default assignee ("Aadish").*
+*Figure 1.2: Incident reporting dialog with severity selection (Critical, High, Medium, Low), assignee ("Aadish Sharma"), and technical log inputs.*
 
-#### 3. Populated Task Management Table
+#### 3. Incident Tickets Management & Outage Queue
 ![M1 Populated Task Table](screenshots/M1_Application/03_app_populated_taskboard.png)
-*Figure 1.3: Responsive data table displaying task statuses, priority badges, created timestamps, and update/delete actions.*
+*Figure 1.3: Responsive data table displaying active incident tickets, urgency pills, status advance button, inspect trigger, and delete action.*
 
 #### 4. FastAPI Swagger UI Documentation (`http://localhost:8000/docs`)
 ![M1 FastAPI Swagger UI](screenshots/M1_Application/04_fastapi_swagger_docs.png)
@@ -123,7 +123,7 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
 *Figure 4.1: Terminal output showing `docker compose up -d` starting all 3 containers with `(healthy)` status.*
 
 ![M4 Browser Verification](screenshots/M4_Docker/03_browser_localhost_3000.png)
-*Figure 4.2: Frontend served through Docker container at `http://localhost:3000` connected to containerized backend.*
+*Figure 4.2: OpsDesk Incident Command Center served through multi-stage Nginx container at `http://localhost:3000` connected to PostgreSQL 16 and FastAPI backend.*
 
 ---
 
@@ -242,7 +242,7 @@ tests/test_api.py::test_get_task_stats PASSED                            [100%]
 
 ### Visual Evidence:
 ![M10 Project Overview](screenshots/M10_Documentation/01_project_overview_dashboard.png)
-*Figure 10.1: Project submission dashboard summarizing all 10 verified modules.*
+*Figure 10.1: OpsDesk production command center dashboard summarizing complete incident lifecycle, active outages, SLA compliance, and DevSecOps quality gates.*
 
 ---
 
