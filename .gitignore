@@ -14,3 +14,15 @@ __pycache__/
 *.py[cod]
 *.pyo
 *.db
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# Terraform
+.terraform.lock.hcl
+crash.log
+
+# OS
+.DS_Store
+Thumbs.db

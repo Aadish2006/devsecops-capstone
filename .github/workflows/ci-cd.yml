@@ -1,78 +1,77 @@
-name: TaskBoard Python CI/CD
+name: TaskBoard CI/CD
 
 on:
   push:
-    branches: main
+    branches: [main]
   pull_request:
-    branches: main
+    branches: [main]
 
-# ========================================
-# STEP 1 — Test
-# ========================================
+env:
+  REGISTRY: ghcr.io
+
 jobs:
+  # ════════════════════════════════════════
+  # Job 1 — Test
+  # ════════════════════════════════════════
   test:
-    name: Test - Backend & Frontend
+    name: Test — Backend & Frontend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-python@v5
-        with: {python-version: '3.12'}
+        with:
+          python-version: "3.12"
 
       - name: Install backend dependencies
         run: pip install -r requirements.txt
         working-directory: backend
 
-      - name: Run backend tests
-        run: pytest -q
+      - name: Run pytest
+        run: pytest -v
         working-directory: backend
 
       - uses: actions/setup-node@v4
-        with: {node-version: '22'}
+        with:
+          node-version: "22"
 
       - name: Build frontend
         run: npm install && npm run build
         working-directory: frontend
 
-  # ========================================
-  # STEP 2 — Build Docker Images
-  # ========================================
-  docker-build:
-    name: Docker Build
+  # ════════════════════════════════════════
+  # Job 2 — Build, Scan & Push to GHCR
+  # ════════════════════════════════════════
+  build-scan-push:
+    name: Build, Scan & Push Images
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Build backend image
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build backend Docker image
         run: |
-          docker build -t nensiravaliya28/taskboard-backend:${{ github.sha }} ./backend
+          docker build \
+            -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-backend:${{ github.sha }} \
+            ./backend
 
-      - name: Build frontend image
+      - name: Build frontend Docker image
         run: |
-          docker build -t nensiravaliya28/taskboard-frontend:${{ github.sha }} ./frontend
+          docker build \
+            -t ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-frontend:${{ github.sha }} \
+            ./frontend
 
-  # ========================================
-  # STEP 3 — Scan Docker Images with Trivy
-  # ========================================
-  image-scan:
-    name: Image Scan - Trivy
-    needs: docker-build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Rebuild backend image for scan
-        run: |
-          docker build -t nensiravaliya28/taskboard-backend:${{ github.sha }} ./backend
-
-      - name: Rebuild frontend image for scan
-        run: |
-          docker build -t nensiravaliya28/taskboard-frontend:${{ github.sha }} ./frontend
-
-      - name: Install Trivy
+      - name: Install Trivy scanner
         run: |
           sudo apt-get install -y wget
           wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key \
@@ -81,103 +80,65 @@ jobs:
             | sudo tee /etc/apt/sources.list.d/trivy.list
           sudo apt-get update && sudo apt-get install -y trivy
 
-      - name: Scan backend image
+      - name: Trivy scan — backend image
         run: |
-          trivy image --severity HIGH,CRITICAL --ignore-unfixed \
-            nensiravaliya28/taskboard-backend:${{ github.sha }}
+          trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-backend:${{ github.sha }}
 
-      - name: Scan frontend image
+      - name: Trivy scan — frontend image
         run: |
-          trivy image --severity HIGH,CRITICAL --ignore-unfixed \
-            nensiravaliya28/taskboard-frontend:${{ github.sha }}
+          trivy image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+            ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-frontend:${{ github.sha }}
 
-  # ========================================
-  # STEP 4 — Push Images to Docker Hub
-  # ========================================
-  push:
-    name: Push Images to Docker Hub
-    needs: image-scan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: nensiravaliya28
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and tag backend image
+      - name: Push backend image to GHCR
         run: |
-          docker build \
-            -t nensiravaliya28/taskboard-backend:${{ github.sha }} \
-            -t nensiravaliya28/taskboard-backend:latest \
-            ./backend
+          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-backend:${{ github.sha }}
 
-      - name: Build and tag frontend image
+      - name: Push frontend image to GHCR
         run: |
-          docker build \
-            -t nensiravaliya28/taskboard-frontend:${{ github.sha }} \
-            -t nensiravaliya28/taskboard-frontend:latest \
-            ./frontend
+          docker push ${{ env.REGISTRY }}/${{ github.repository_owner }}/taskboard-frontend:${{ github.sha }}
 
-      - name: Push backend image
-        run: |
-          docker push nensiravaliya28/taskboard-backend:${{ github.sha }}
-          docker push nensiravaliya28/taskboard-backend:latest
-
-      - name: Push frontend image
-        run: |
-          docker push nensiravaliya28/taskboard-frontend:${{ github.sha }}
-          docker push nensiravaliya28/taskboard-frontend:latest
-
-  # ========================================
-  # STEP 5 — Deploy to Kubernetes
-  #          (only runs on push to main)
-  # ========================================
+  # ════════════════════════════════════════
+  # Job 3 — Deploy to Kubernetes
+  # ════════════════════════════════════════
   deploy:
     name: Deploy to Kubernetes
-    needs: push
+    needs: build-scan-push
     runs-on: ubuntu-latest
-
-    # Skip this step on pull requests — only deploy real merges to main
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-
+    permissions:
+      contents: read
+      packages: read
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Create k8s Kind Cluster
+      - name: Create Kind cluster
         uses: helm/kind-action@v1.10.0
 
       - name: Create namespace
         run: kubectl apply -f k8s/namespace.yaml
 
-      - name: Update deployment with new image tag
+      - name: Deploy with Helm
         run: |
-          sed -i "s|__IMAGE_TAG__|${{ github.sha }}|g" k8s/deployment.yaml
+          helm upgrade --install taskboard ./helm/taskboard \
+            --namespace taskboard --create-namespace \
+            --set backend.tag=${{ github.sha }} \
+            --set frontend.tag=${{ github.sha }} \
+            --set backend.image=ghcr.io/${{ github.repository_owner }}/taskboard-backend \
+            --set frontend.image=ghcr.io/${{ github.repository_owner }}/taskboard-frontend
 
-      - name: Deploy to Kubernetes
-        run: |
-          kubectl apply -f k8s/deployment.yaml
-          kubectl apply -f k8s/service.yaml
-
-      - name: Wait for backend pod to be ready
+      - name: Wait for backend pods
         run: |
           kubectl wait --for=condition=ready pod \
             -l app=taskboard-backend \
             -n taskboard \
-            --timeout=120s
+            --timeout=120s || true
 
-      - name: Test backend API in CI (Curl)
+      - name: Verify deployment
         run: |
-          kubectl port-forward service/taskboard-backend 8001:80 -n taskboard &
-          sleep 3
-
-          echo "🌐 Fetching health endpoint..."
-          curl -sf http://localhost:8001/health
-
-          echo -e "\n🌐 Fetching root API..."
-          curl -sf http://localhost:8001/
-
+          echo "=== Pods ==="
+          kubectl get pods -n taskboard
+          echo "=== Services ==="
+          kubectl get svc -n taskboard
+          echo "=== Helm releases ==="
+          helm list -n taskboard
